@@ -14,19 +14,22 @@
 
 ## 👥 팀 구성
 
-| 역할 | 이름 | 담당 |
-|------|------|------|
-| 조장 | 김지율 | MySQL Master-Master, keepalived VIP, SECUI NGF 정책, static routing |
-| 팀원 | 김건우 | Log Analytics, Port Mirroring, Wireshark, 계정 IP 제한 |
-| 팀원 | 김보라 | WEB 서버, 게시판 DB/PHP, RAID1 |
-| 팀원 | 박종민 | IPsec VPN, 로컬 방화벽, rsyslog 로그서버 |
-| 팀원 | 서강민 | Terraform IaC, L2/L3 VLAN, Hybrid 방화벽, Azure VMSS |
+| 역할 | 이름 |
+|------|------|
+| 조장 | 김지율 |
+| 팀원 | 김건우 |
+| 팀원 | 박종민 |
+| 팀원 | 서강민 |
 
 ---
 
-## 🏗️ 인프라 구성
+## 🏗️ 인프라 구성도
 
-### On-premise
+![전체 인프라 구성도](./images/architecture.png)
+
+---
+
+## 🌐 네트워크 설계
 
 ```
 [인터넷]
@@ -48,8 +51,6 @@ VLAN 30  192.168.3.0/29   서버팜
   └── VIP  192.168.3.6  (keepalived)
 VLAN 40  192.168.4.0/30   Analyse 서버 (192.168.4.2)
 ```
-
-### Azure (Hub-Spoke · 이중 리전)
 
 ```
 Traffic Manager (team601shop.trafficmanager.net)
@@ -90,6 +91,8 @@ IPsec VPN  AES-256 / SHA-256 / DHGroup14 / IKEv2
 ```
 📦 hybrid-cloud-security
  ├── 📄 README.md
+ ├── 📂 images/
+ │   └── architecture.png
  ├── 📂 terraform/
  │   ├── 00_init.tf            # Provider 초기화 (azurerm 4.74.0)
  │   ├── 01_rg.tf              # 리소스 그룹 (Central · Japan)
@@ -113,11 +116,11 @@ IPsec VPN  AES-256 / SHA-256 / DHGroup14 / IKEv2
  │   ├── 19_monitor.tf         # Log Analytics + 진단 설정
  │   ├── 20_trafficmanager.tf  # Traffic Manager
  │   ├── 100_var.tf            # 전역 변수
- │   └── install.sh.tpl        # 부팅 스크립트 (WordPress + Redis)
+ │   └── install.sh.tpl        # 부팅 스크립트
  └── 📂 switch-config/
-     ├── L2-1_설정_진짜최종.txt  # CISCO C2960 좌측 (VLAN10/20, SSH, BPDU Guard)
-     ├── L2-2_설정_진짜최종.txt  # CISCO C2960 우측 (VLAN10/20/30, Port Security)
-     └── L3_설정_진짜최종.txt    # PIOLINK TiFRONT (SVI, ACL, Port Mirroring, Syslog)
+     ├── L2-1_설정_진짜최종.txt
+     ├── L2-2_설정_진짜최종.txt
+     └── L3_설정_진짜최종.txt
 ```
 
 ---
@@ -157,4 +160,4 @@ IPsec VPN  AES-256 / SHA-256 / DHGroup14 / IKEv2
 
 ## 🔗 관련 프로젝트
 
-- [Azure 클라우드 인프라 구축 (이전 프로젝트)](https://github.com/) — 본 프로젝트에서 연계 활용한 Azure 인프라 원본
+- [Azure 클라우드 인프라 구축 (이전 프로젝트)](https://github.com/brk-devsec)
